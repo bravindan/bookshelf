@@ -4,8 +4,9 @@ import Welcome from './pages/Welcome'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Newbook from './pages/Newbook'
 import './App.css'
-import HomeController from './pages/Home'
+
 
 function App() {
   
@@ -18,7 +19,7 @@ function App() {
       <Route path = '/login' element ={<Login/>} />
       <Route path = '/register' element ={<Register/>} />
       <Route path = '/Home' element ={<Home/>} />
-      <Route path = '/Homec' element ={<HomeController/>} />
+      <Route path = '/addbook' element ={<Newbook/>} />
     </Routes>
    </BrowserRouter>
     </>

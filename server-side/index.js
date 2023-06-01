@@ -20,7 +20,7 @@ app.use(cors({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'lucidtech',
+    password: '1309',
     database: 'bookshelf',
 })
 
