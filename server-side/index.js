@@ -1,4 +1,4 @@
-// const express = require('express');
+
 import express from 'express'
 import mysql from 'mysql';
 import cors from 'cors';
@@ -102,6 +102,37 @@ app.get('/logout',(req, res) =>{
     return res.json({Status: 'OK'});
 })
 
+// BOOKS SECTION
+app.get('/books', (req, res)=>{
+    const sql = 'SELECT * FROM books';
+    db.query(sql, (error, result)=>{
+        if(error) return res.send(error);
+        if(result.length>0){
+            res.send('success')
+        }else{
+            res.send('No records found')
+        }
+    })
+})
+
+app.post('/addbook',(req, res)=>{
+    
+    const sqlCommand = 'INSERT INTO books(`title`,`author`,`overview`) VALUES (?);'
+    const values = [req.body.book_title, req.body.book_author, book_summary];
+
+        db.query(sqlCommand, [values], (error, result)=>{
+            if(error){
+                console.log(error)
+                res.send(error)
+            }
+            console.log(result)
+            console.log("Registered")
+            res.send( {Status: 'Book added'})
+        });
+
+});
+
+
 // starting server
 app.listen(PORT || 8000, (error)=> {
     if(error){
@@ -110,3 +141,4 @@ app.listen(PORT || 8000, (error)=> {
     console.log('Running on http://localhost:' + PORT);
 
 })
+

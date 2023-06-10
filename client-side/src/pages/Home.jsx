@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 export default function HomeController() {
   const [auth, setAuth] = useState(false);
   const [name, setName] = useState('');
+  const [searchTerm, setSearchTerm] =useState('');
+  const [books, setBooks] = useState('')
   const redirect = useNavigate();
   axios.defaults.withCredentials= true
 
@@ -33,6 +35,16 @@ export default function HomeController() {
       redirect('/addbook')
    }
 
+   async function getBooks(){
+    axios.get('http://localhost:5000/books').then((res)=>{
+      console.log(res.data)
+      setBooks(res.data)
+    }).catch((err)=>{
+      console.log(err)
+    })
+   }
+   getBooks()
+   
   return (
     <div className='container mt-4'>
       {
@@ -49,8 +61,12 @@ export default function HomeController() {
       <hr/>
           <div className='d-flex align-items-center justify-content-between'>
               <button onClick={handleRedirect} className='btn btn-secondary mx-4'> +New</button>
-              <input type="search" name="search" id="" placeholder='Type to search' className='form-control mx-12'/>
+              <input type="search" value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} name="search" id="" placeholder='Type to search' className='form-control mx-12'/>
           </div>
+          {(books.length==0 && <>{books}</>)  }
+          
+
+        
       
       </div>
         : 

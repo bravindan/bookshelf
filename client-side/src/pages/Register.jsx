@@ -35,9 +35,9 @@ function Register() {
   return (
     <div className=''>
         <div className='d-flex align-items-center justify-content-center vh-100 bg-primary' >
-            <form className='p-3 my-3 w-75 border bg-white rounded' onSubmit={handleRegistration}>
+            <form className='p-3 my-3 w-6/12 border bg-white rounded' onSubmit={handleRegistration}>
 
-                <div className='form-group mx-auto w-100'>
+                <div className='form-group mx-auto w-75'>
                     <h1 className='mb-3 fw-bold'>Register</h1>
                     <label htmlFor="name" className='fw-bold'>Name</label>
                     <input type="text" value={name} onChange={(e)=>setname(e.target.value)} placeholder='Name' className='form-control mb-3'/>
