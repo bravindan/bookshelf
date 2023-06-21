@@ -61,9 +61,12 @@ app.post('/login', (req, res)=>{
                 if(err) return (err);
                 if(result){
                     const name = rows[0].name;
-                    const token = Jwt.sign({name},'login-secret',{expiresIn: 1800});
+                    const id = rows[0].id;
+
+                    const token = Jwt.sign({id, name},'login-secret',{expiresIn: 1800});
                     res.cookie('token', token)
-                    return res.send({Status: 'OK'})
+                    
+                    return res.send({Status: 'OK', id: id})
                 }else{
                     return res.send({Error: 'Wrong password'});
                 }
@@ -86,6 +89,7 @@ const verifyUser =(req, res, next) => {
                 return res.send('invalidtoken')
             }else{
                 req.name= decodedResult.name;
+                req.id=decodedResult.id;
                 next();
             }
 
@@ -94,7 +98,8 @@ const verifyUser =(req, res, next) => {
 }
 
 app.get('/', verifyUser, (req, res) => {
-    return res.json({Status: 'OK', name: req.name});
+
+    return res.json({Status: 'OK', name: req.name, id:req.id});
 })
 
 app.get('/logout',(req, res) =>{
@@ -103,9 +108,10 @@ app.get('/logout',(req, res) =>{
 })
 
 // BOOKS SECTION
-app.get('/books', (req, res)=>{
-    const sql = 'SELECT * FROM books';
-    db.query(sql, (error, result)=>{
+app.get('/books/:id', (req, res)=>{
+    const user_id = req.params.id
+    const sql = 'SELECT * FROM books WHERE user_id=?';
+    db.query(sql,[user_id], (error, result)=>{
         if(error) return res.send(error);
         if(result.length>0){
             res.send('success')

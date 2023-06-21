@@ -1,6 +1,12 @@
+import axios from 'axios'
 import React from 'react'
 
 function Newbook() {
+
+  const getBoooksByUserID = async()=>{
+    const res = await axios.get('http://localhost:5000/books')
+  }
+
   return (
     <div className='d-flex align-items-center justify-content-center bg-primary vh-100'>
         <form  className='p-3 my-3 mx-auto w-6/12 border bg-light rounded'>

@@ -18,8 +18,9 @@ export default function Login() {
     axios.post('http://localhost:5000/login', userData)
         .then((res) => {
            
-            if(res.data.Status==='OK') {
-                
+                // console.log('logged in user id:', res.data.id)
+                if(res.data.Status==='OK') {
+
                 redirect('/home')
             }else if(res.data.Error){
                 alert(res.data.Error)
