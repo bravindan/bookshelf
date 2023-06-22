@@ -1,5 +1,5 @@
 import {} from 'react'
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import {BrowserRouter, Routes, Route, useParams} from 'react-router-dom'
 import Welcome from './pages/Welcome'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -10,7 +10,7 @@ import './App.css'
 
 function App() {
   
-
+const id = useParams
   return (
     <>
    <BrowserRouter>
@@ -19,7 +19,7 @@ function App() {
       <Route path = '/login' element ={<Login/>} />
       <Route path = '/register' element ={<Register/>} />
       <Route path = '/Home' element ={<Home/>} />
-      <Route path = '/addbook' element ={<Newbook/>} />
+      <Route path = '/addbook/:id' element ={<Newbook/>} />
     </Routes>
    </BrowserRouter>
     </>

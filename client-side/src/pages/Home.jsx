@@ -2,7 +2,7 @@
 import React,{useState, useEffect} from 'react'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
-import { Link } from 'react-router-dom';
+import { Link,useParams } from 'react-router-dom';
 import Welcome from './Welcome';
 
 export default function HomeController() {
@@ -14,15 +14,13 @@ export default function HomeController() {
   const redirect = useNavigate();
   axios.defaults.withCredentials= true
 
-  async function loggedInUserInfo(){
-    await axios.get('http://localhost:5000').then((res) => {
+  function loggedInUserInfo(){
+   axios.get('http://localhost:5000').then((res) => {
+    
       if(res.data.Status === 'OK') {
         setAuth(true)
         setName(res.data.name)
         setuser_id(res.data.id)
-        
-        // console.log('logged in user id:', user_id)
-        // console.log('logged in user name:', name)
 
       }else{
         setAuth(false)
@@ -42,27 +40,24 @@ export default function HomeController() {
       redirect('/')
     }).catch((err) => {console.log(err)});
   };
-   const handleRedirect = (user_id) =>{
-      redirect('/addbook')
+   const handleRedirect = () =>{
+      redirect(`/addbook/${user_id}`)
    }
 
    const getBoooksByUserID = async(user_id)=>{
-    await axios.get(`http://localhost:5000/books/${user_id}`).then((res)=>{
-      console.log(res.data) 
+    await axios.get(`http://localhost:5000/books?user_id=${user_id}`).then((res)=>{
+      // console.log(res.data) 
+      setBooks(res.data.result)
+      // console.log(user_id)
+
     }).catch((err)=>{
       return err
     })
   }
-  getBoooksByUserID()
-  //  async function getBooks(){
-  //   axios.get('http://localhost:5000/books').then((res)=>{
-  //     console.log(res.data)
-  //     setBooks(res.data)
-  //   }).catch((err)=>{
-  //     console.log(err)
-  //   })
-  //  }
-  //  getBooks()
+  useEffect(()=>{
+    getBoooksByUserID(user_id)
+  },[user_id])
+  
    
   return (
     <div className='container mt-4'>
@@ -81,8 +76,22 @@ export default function HomeController() {
               <button onClick={handleRedirect} className='btn btn-secondary mx-4'> +New</button>
               <input type="search" value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} name="search" id="" placeholder='Type to search' className='form-control mx-12'/>
           </div>
-          {user_id}
-          {(books.length==0 && <>{books}</>)  }
+          {/* {user_id} */}
+          <div className='mt-3'>
+         
+              {books && books.length > 0 ?(
+              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-4'>{books.map((book)=>(
+                <div key={book.book_id}>
+                  <h3>{book.book_title}</h3>
+                  <p>Author: {book.book_author}</p>
+                  <p>{book.book_summary}</p>
+
+                </div>
+              ))}</div>)
+              
+              : <div><p className='text-center mt-4 text-lg font-bold'>{books? books.msg:"No records yet for this user"}</p></div> }
+             
+          </div>
           
       </div>}
       

@@ -108,31 +108,33 @@ app.get('/logout',(req, res) =>{
 })
 
 // BOOKS SECTION
-app.get('/books/:id', (req, res)=>{
-    const user_id = req.params.id
-    const sql = 'SELECT * FROM books WHERE user_id=?';
-    db.query(sql,[user_id], (error, result)=>{
+app.get('/books', (req, res)=>{
+    const user_id = req.query.user_id
+    // console.log(user_id)
+    const sql = `SELECT * FROM books WHERE user_id=${db.escape(user_id)}`;
+    db.query(sql,[user_id], (error, data)=>{
         if(error) return res.send(error);
-        if(result.length>0){
-            res.send('success')
+        if(data.length>0){
+            // console.log(data)
+            res.json({result: data})
         }else{
-            res.send('No records found')
+            res.json({msg:'No records yet for this user'})
+            
         }
     })
 })
 
 app.post('/addbook',(req, res)=>{
     
-    const sqlCommand = 'INSERT INTO books(`title`,`author`,`overview`) VALUES (?);'
-    const values = [req.body.book_title, req.body.book_author, book_summary];
+    const sqlCommand = 'INSERT INTO books(`book_title`,`book_author`,`book_summary`,`user_id`) VALUES (?);'
+    const values = [req.body.book_title, req.body.book_author, req.body.book_summary, req.body.user_id];
 
         db.query(sqlCommand, [values], (error, result)=>{
             if(error){
                 console.log(error)
                 res.send(error)
             }
-            console.log(result)
-            console.log("Registered")
+            // console.log(result)
             res.send( {Status: 'Book added'})
         });
 
