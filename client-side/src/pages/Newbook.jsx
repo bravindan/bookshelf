@@ -16,7 +16,7 @@ function Newbook() {
   // formData.append('book_summary', summary);
   // formData.append('user_id', user_id);
 const bookDetails = {
-  title, author, summary,user_id
+  book_title, book_author, book_summary, user_id
 }
 
 const addNewBook = async (event)=>{
